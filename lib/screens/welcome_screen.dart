@@ -1,8 +1,10 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flash_chat/widgets/auth_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flash_chat/widgets/flicker_animated_text_corrected.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String id = "/welcome_screen";
@@ -15,41 +17,6 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
-  late Animation animation;
-
-  @override
-  void initState() {
-    super.initState();
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    );
-
-    animation =
-        CurvedAnimation(parent: animationController, curve: Curves.ease);
-
-    animationController.forward();
-
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        animationController.reverse(from: 1.0);
-      } else if (status == AnimationStatus.dismissed) {
-        animationController.forward();
-      }
-    });
-
-    animationController.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    animationController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,13 +32,22 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Hero(
                   tag: 'logo',
                   child: Container(
-                    height: animation.value * 100,
+                    height: 100,
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
-                const Text(
-                  'Flash Chat',
-                  style: kTitleTextBig,
+                Expanded(
+                  child: DefaultTextStyle(
+                    style: kTitleTextBig,
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        FlickerAnimatedTextCorrected(
+                          'Flash Chat',
+                        ),
+                      ],
+                      repeatForever: true,
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
 class AuthInput extends StatelessWidget {
-  const AuthInput({
-    super.key,
-    required this.borderColor,
-    required this.hintText,
-    required this.onChange,
-  });
+  const AuthInput(
+      {super.key,
+      required this.borderColor,
+      required this.hintText,
+      required this.onChange,
+      this.isObscureText,
+      this.keyboardType});
 
   final String hintText;
   final Function(String) onChange;
   final Color borderColor;
+  final bool? isObscureText;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      textAlign: TextAlign.center,
+      keyboardType: keyboardType,
+      obscureText: isObscureText ?? false,
       onChanged: onChange,
       style: const TextStyle(
         color: Colors.black,

@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 
 const kTitleTextBig = TextStyle(
-  fontSize: 45.0,
+  fontSize: 50,
   fontWeight: FontWeight.w900,
+  color: Colors.black,
+  shadows: [
+    Shadow(
+      blurRadius: 20.0,
+      color: Colors.black54,
+      offset: Offset(0, 0),
+    ),
+  ],
 );
 
 const kAuthButtonTextSTyle = TextStyle(

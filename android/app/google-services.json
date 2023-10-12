@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "246965547240",
+    "project_id": "chat-log-fe4aa",
+    "storage_bucket": "chat-log-fe4aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246965547240:android:5c2e26b0edcb92a6d8d95d",
+        "android_client_info": {
+          "package_name": "com.example.flash_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE-2qV2kEvUX0ob8paL-301BCQ6Bb8Yu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246965547240:android:21b99345faefa00fd8d95d",
+        "android_client_info": {
+          "package_name": "com.tosacezar.nush"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE-2qV2kEvUX0ob8paL-301BCQ6Bb8Yu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
