@@ -31,11 +31,13 @@ class StreamMessages extends StatelessWidget {
           Map<String, dynamic> data = document.data() as Map<String, dynamic>;
           final message = data['message'];
           final sender = data['sender'];
+          final profileImage = data['profileImage'];
           messageWidgets.add(
             MessageBubble(
               message: message,
               sender: sender,
               usersMessage: sender == usersEmail,
+              profileImage: profileImage,
             ),
           );
         }

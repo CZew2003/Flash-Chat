@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'message_container.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -6,50 +7,52 @@ class MessageBubble extends StatelessWidget {
     required this.message,
     required this.sender,
     required this.usersMessage,
+    required this.profileImage,
   });
 
   final bool usersMessage;
   final String message;
   final String sender;
+  final String? profileImage;
+
+  List<Widget> getWidgets() {
+    List<Widget> elements = [];
+    elements.add(Expanded(
+      child: MessageContainer(
+          message: message, sender: sender, usersMessage: usersMessage),
+    ));
+    if (profileImage != null) {
+      elements.insert(
+        usersMessage ? 1 : 0,
+        Padding(
+          padding: EdgeInsets.only(
+            left: usersMessage ? 5.0 : 0,
+            right: !usersMessage ? 5.0 : 0,
+          ),
+          child: ClipOval(
+            child: Image.network(
+              profileImage!,
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      );
+    }
+    return elements;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment:
-            usersMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Text(
-            sender.split('@')[0],
-            style: const TextStyle(
-              color: Colors.black54,
-              fontSize: 12,
-            ),
-          ),
-          Material(
-            elevation: 5,
-            color: usersMessage ? Colors.lightBlueAccent : Colors.blueAccent,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(usersMessage ? 30.0 : 0),
-                topRight: Radius.circular(!usersMessage ? 30.0 : 0),
-                bottomLeft: const Radius.circular(30.0),
-                bottomRight: const Radius.circular(30.0)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 10.0,
-              ),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment:
+            usersMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        textBaseline: TextBaseline.ideographic,
+        children: getWidgets(),
       ),
     );
   }

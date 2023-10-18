@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flash_chat/screens/chat_screen.dart';
+import 'package:flash_chat/services/firebase_storage_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/widgets/auth_button.dart';
 import 'package:flash_chat/widgets/auth_input.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = "/register_screen";
@@ -20,6 +24,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   bool spinner = false;
 
+  XFile? _image;
+  final picker = ImagePicker();
+
+  final firebaseStorageManager = FirebaseStorageManager();
+
+  Future getImageFromGallery() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = pickedFile;
+      } else {
+        return;
+      }
+    });
+    print(_image!.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +56,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Hero(
-                    tag: 'logo',
-                    child: SizedBox(
-                      height: 200,
-                      child: Image.asset('images/logo.png'),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          await getImageFromGallery();
+                        },
+                        child: SizedBox(
+                          child: ClipOval(
+                            child: _image != null
+                                ? Image.file(
+                                    File(_image!.path),
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'images/avatar.webp',
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                      ),
+                      Hero(
+                        tag: 'logo',
+                        child: SizedBox(
+                          height: 200,
+                          child: Image.asset('images/logo.png'),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 50,
@@ -75,12 +127,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           spinner = true;
                         });
                         try {
-                          await _auth.createUserWithEmailAndPassword(
+                          UserCredential userCredential =
+                              await _auth.createUserWithEmailAndPassword(
                             email: email,
                             password: password,
                           );
                           email = "";
                           password = "";
+                          if (_image != null) {
+                            await firebaseStorageManager.uploadImage(_image!);
+                          }
+                          await userCredential.user
+                              ?.updatePhotoURL(firebaseStorageManager.imageUrl);
+                          _image = null;
                           Navigator.pushNamed(context, ChatScreen.id);
                         } catch (e) {
                           print(e);

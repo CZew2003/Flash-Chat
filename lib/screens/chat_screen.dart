@@ -80,6 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'message': message,
                         'sender': loggedInUser.email,
                         'time': Timestamp.now(),
+                        'profileImage': loggedInUser.photoURL
                       });
                     }
                     message = "";
