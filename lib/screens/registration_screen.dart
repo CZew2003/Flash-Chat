@@ -127,18 +127,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           spinner = true;
                         });
                         try {
+                          if (_image != null) {
+                            await firebaseStorageManager.uploadImage(_image!);
+                          } else {
+                            throw "imaginea nu a fost incarcata";
+                          }
                           UserCredential userCredential =
                               await _auth.createUserWithEmailAndPassword(
                             email: email,
                             password: password,
                           );
-                          email = "";
-                          password = "";
-                          if (_image != null) {
-                            await firebaseStorageManager.uploadImage(_image!);
-                          }
                           await userCredential.user
                               ?.updatePhotoURL(firebaseStorageManager.imageUrl);
+                          email = "";
+                          password = "";
                           _image = null;
                           Navigator.pushNamed(context, ChatScreen.id);
                         } catch (e) {
