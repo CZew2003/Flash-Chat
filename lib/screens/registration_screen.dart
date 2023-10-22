@@ -132,7 +132,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             await firebaseStorageManager.uploadImage(_image!);
                           } else {
                             Fluttertoast.showToast(
-                              msg: 'Imaginea nu a fost incarcata',
+                              msg: 'Image was not provided',
                               toastLength: Toast.LENGTH_SHORT,
                             );
                             throw "imaginea nu a fost incarcata";
@@ -149,7 +149,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           _image = null;
                           Navigator.pushNamed(context, ChatScreen.id);
                         } catch (e) {
-                          print(e);
+                          Fluttertoast.showToast(
+                            msg: e.toString(),
+                            toastLength: Toast.LENGTH_SHORT,
+                          );
                         }
                         setState(() {
                           spinner = false;
