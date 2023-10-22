@@ -8,6 +8,7 @@ import 'package:flash_chat/widgets/auth_input.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = "/register_screen";
@@ -130,6 +131,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           if (_image != null) {
                             await firebaseStorageManager.uploadImage(_image!);
                           } else {
+                            Fluttertoast.showToast(
+                              msg: 'Imaginea nu a fost incarcata',
+                              toastLength: Toast.LENGTH_SHORT,
+                            );
                             throw "imaginea nu a fost incarcata";
                           }
                           UserCredential userCredential =
